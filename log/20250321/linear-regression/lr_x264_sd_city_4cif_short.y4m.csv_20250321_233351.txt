@@ -1,0 +1,5 @@
+dataset: sd_city_4cif_short.y4m.csv
+runs: 30
+MAE: 1.47±0.04
+RMSE: 1.90±0.05
+MAPE: 81.96±5.55

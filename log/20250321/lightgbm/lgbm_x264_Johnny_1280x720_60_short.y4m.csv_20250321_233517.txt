@@ -1,0 +1,5 @@
+dataset: Johnny_1280x720_60_short.y4m.csv
+runs: 30
+MAE: 1.02±0.07
+RMSE: 2.12±0.12
+MAPE: 16.24±0.86

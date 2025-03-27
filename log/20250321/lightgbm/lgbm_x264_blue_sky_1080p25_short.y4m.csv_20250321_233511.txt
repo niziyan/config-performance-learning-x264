@@ -1,0 +1,5 @@
+dataset: blue_sky_1080p25_short.y4m.csv
+runs: 30
+MAE: 1.27±0.09
+RMSE: 2.57±0.14
+MAPE: 15.44±0.79

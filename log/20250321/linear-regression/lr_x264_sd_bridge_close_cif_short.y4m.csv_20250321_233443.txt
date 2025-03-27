@@ -1,0 +1,5 @@
+dataset: sd_bridge_close_cif_short.y4m.csv
+runs: 30
+MAE: 0.14±0.00
+RMSE: 0.18±0.01
+MAPE: 51.38±2.73

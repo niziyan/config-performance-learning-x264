@@ -1,0 +1,143 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{times} 
+\usepackage[a4paper,margin=1.35in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Requirements for Configuration Performance Learning for X264},
+    pdfpagemode=FullScreen,
+}
+
+\singlespacing 
+\title{Requirements for Configuration Performance Learning for X264}
+\author{Configuration Performance Learning Research}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Software Requirements}
+
+This project requires the following software components to run the machine learning models for predicting x264 configuration performance:
+
+\subsection{Python Environment}
+The implementation requires Python 3.6 or higher. We recommend using a virtual environment to manage dependencies.
+
+\begin{lstlisting}[language=bash]
+# Create and activate a virtual environment
+python -m venv x264_env
+source x264_env/bin/activate  # On Windows: x264_env\Scripts\activate
+\end{lstlisting}
+
+\subsection{Required Python Packages}
+The following Python packages are required to run the code. Install them using pip:
+
+\begin{lstlisting}[language=bash]
+pip install numpy pandas scikit-learn lightgbm
+\end{lstlisting}
+
+\begin{table}[h]
+\centering
+\caption{Required Python Package Versions}
+\begin{tabular}{lll}
+\toprule
+\textbf{Package} & \textbf{Min Version} & \textbf{Purpose} \\
+\midrule
+numpy & 1.19.0 & Numerical operations and array handling \\
+pandas & 1.1.0 & Dataset loading and preprocessing \\
+scikit-learn & 0.24.0 & Linear Regression model and metrics \\
+lightgbm & 3.2.0 & Gradient boosting implementation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Hardware Requirements}
+The experiments were conducted on a system with the following specifications:
+
+\begin{itemize}
+    \item CPU: Intel Core i7 or equivalent (4+ cores recommended)
+    \item RAM: Minimum 8GB (16GB recommended for large datasets)
+    \item Disk Space: At least 1GB free space for datasets and result logs
+\end{itemize}
+
+While the models can run on less powerful hardware, training time may increase significantly.
+
+\section{Directory Structure}
+The codebase expects a specific directory structure to function properly:
+
+\begin{lstlisting}
+config-performance-learning-x264/
+├── data_loader.py
+├── lightGBM.py
+├── lr.py
+├── datasets/
+│   └── x264/
+│       ├── blue_sky_1080p25.csv
+│       ├── Johnny_1280x720_60.csv
+│       └── ... (other video datasets)
+└── log/
+    └── YYYYMMDD/
+        ├── lightgbm/
+        └── linear-regression/
+\end{lstlisting}
+
+The `datasets` directory contains subdirectories for each system (x264 in this case), with CSV files for each video. The `log` directory stores results organized by date and model type.
+
+\section{Dataset Format}
+Each dataset CSV file should have the following format:
+
+\begin{itemize}
+    \item Rows represent different configurations of x264
+    \item Columns represent configuration parameters
+    \item The last column contains the performance metric (runtime in seconds)
+    \item No header row (or will be automatically skipped if present)
+\end{itemize}
+
+The dataset used in this study is based on x264 version baee400 and includes 3,113 unique configurations across 25 parameters.
+
+\section{Environment Variables}
+No specific environment variables are required for this project.
+
+\section{Compilation}
+As this is a Python project, no compilation is needed. The scripts can be run directly using the Python interpreter.
+
+\end{document}

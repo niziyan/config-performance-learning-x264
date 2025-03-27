@@ -1,0 +1,5 @@
+dataset: riverbed_1080p25_short.y4m.csv
+runs: 30
+MAE: 6.65±0.19
+RMSE: 8.83±0.30
+MAPE: 65.22±4.11

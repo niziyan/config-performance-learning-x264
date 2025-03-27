@@ -1,0 +1,5 @@
+dataset: pedestrian_area_1080p25_short.y4m.csv
+runs: 30
+MAE: 1.47±0.10
+RMSE: 2.99±0.16
+MAPE: 15.07±0.77

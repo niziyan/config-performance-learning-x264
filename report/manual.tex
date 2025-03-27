@@ -1,0 +1,238 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{times} 
+\usepackage[a4paper,margin=1.35in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={User Manual for X264 Configuration Performance Learning Tool},
+    pdfpagemode=FullScreen,
+}
+
+\singlespacing 
+\title{User Manual for X264 Configuration Performance Learning Tool}
+\author{Configuration Performance Learning Research}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+This manual explains how to use the X264 Configuration Performance Learning Tool. The tool provides two machine learning models (Linear Regression and LightGBM) to predict the performance of different x264 encoder configurations.
+
+\section{Installation}
+
+Before using the tool, ensure you have installed all required dependencies as specified in the requirements document. The basic installation steps are:
+
+\begin{lstlisting}[language=bash]
+# Clone the repository
+git clone https://github.com/niziyan/x264-performance-prediction.git
+cd x264-performance-prediction
+
+# Install dependencies
+pip install -r requirements.txt
+\end{lstlisting}
+
+\section{Dataset Preparation}
+
+\subsection{Dataset Format}
+The tool expects datasets in CSV format with the following structure:
+\begin{itemize}
+    \item Each row represents a specific x264 configuration
+    \item Each column represents a configuration parameter
+    \item The last column contains the performance metric (runtime in seconds)
+\end{itemize}
+
+\subsection{Dataset Organization}
+Place your dataset files in the correct directory structure:
+\begin{lstlisting}
+datasets/
+└── x264/
+    ├── blue_sky_1080p25.csv
+    ├── Johnny_1280x720_60.csv
+    └── ... (other video datasets)
+\end{lstlisting}
+
+\section{Tool Components}
+
+The tool consists of three main Python scripts:
+
+\subsection{data\_loader.py}
+This script handles dataset loading and preparation. It provides the following functionality:
+\begin{itemize}
+    \item Listing available datasets in the datasets directory
+    \item Loading specific datasets and splitting them into training and test sets
+\end{itemize}
+
+You can use this script directly to check available datasets:
+\begin{lstlisting}[language=bash]
+python data_loader.py
+\end{lstlisting}
+
+\subsection{lr.py}
+This script implements the Linear Regression model for predicting x264 performance. It includes functions for:
+\begin{itemize}
+    \item Training the linear regression model
+    \item Evaluating model performance using multiple metrics
+    \item Running multiple experiments with different random seeds
+    \item Logging results to files
+\end{itemize}
+
+\subsection{lightGBM.py}
+This script implements the LightGBM gradient boosting model for predicting x264 performance. It offers:
+\begin{itemize}
+    \item Training a gradient boosting model with tuned parameters
+    \item Evaluating model performance using multiple metrics
+    \item Running multiple experiments with different random seeds
+    \item Logging results to files
+\end{itemize}
+
+\section{Usage Instructions}
+
+\subsection{Listing Available Datasets}
+To view all available datasets:
+\begin{lstlisting}[language=bash]
+python data_loader.py
+\end{lstlisting}
+
+\subsection{Running Linear Regression Model}
+To train and evaluate the Linear Regression model:
+
+\begin{lstlisting}[language=bash]
+# Run on all CSV files in the x264 dataset
+python lr.py --dataset x264
+
+# Run on a specific CSV file
+python lr.py --dataset x264 --csv blue_sky_1080p25.csv
+
+# Change the number of experimental runs
+python lr.py --dataset x264 --runs 10
+\end{lstlisting}
+
+\subsection{Running LightGBM Model}
+To train and evaluate the LightGBM model:
+
+\begin{lstlisting}[language=bash]
+# Run on all CSV files in the x264 dataset
+python lightGBM.py --dataset x264
+
+# Run on a specific CSV file
+python lightGBM.py --dataset x264 --csv blue_sky_1080p25.csv
+
+# Change the number of experimental runs
+python lightGBM.py --dataset x264 --runs 10
+\end{lstlisting}
+
+\subsection{Command-line Arguments}
+Both model scripts accept the following command-line arguments:
+
+\begin{table}[h]
+\centering
+\caption{Command-line Arguments}
+\begin{tabular}{lll}
+\toprule
+\textbf{Argument} & \textbf{Default} & \textbf{Description} \\
+\midrule
+--dataset & x264 & Dataset directory name \\
+--csv & None & Specific CSV file (if None, processes all) \\
+--runs & 30 & Number of experimental runs \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Understanding the Results}
+
+\subsection{Performance Metrics}
+The tool reports three key performance metrics:
+\begin{itemize}
+    \item MAE (Mean Absolute Error): Average magnitude of errors in seconds
+    \item RMSE (Root Mean Squared Error): Square root of average squared errors
+    \item MAPE (Mean Absolute Percentage Error): Percentage of error relative to actual value
+\end{itemize}
+
+\subsection{Result Logs}
+Results are saved to log files with the following naming convention:
+\begin{lstlisting}
+log/YYYYMMDD/model-name/model_dataset_csvfile_timestamp.txt
+\end{lstlisting}
+
+Each log file contains:
+\begin{itemize}
+    \item Dataset name
+    \item Number of runs
+    \item Performance metrics with mean and standard deviation
+\end{itemize}
+
+Example log file content:
+\begin{lstlisting}
+dataset: blue_sky_1080p25.csv
+runs: 30
+MAE: 3.12±0.21
+RMSE: 4.24±0.32
+MAPE: 13.90±0.75
+\end{lstlisting}
+
+\section{Troubleshooting}
+
+\subsection{Dataset Not Found}
+If you receive a "Dataset not found" error:
+\begin{itemize}
+    \item Check that your dataset files are in the correct directory
+    \item Ensure file names match exactly what you specified
+    \item Verify file permissions allow reading
+\end{itemize}
+
+\subsection{Model Training Errors}
+If you encounter errors during model training:
+\begin{itemize}
+    \item Verify dataset format has features in all columns except the last
+    \item Check for missing or non-numeric values in your dataset
+    \item Ensure sufficient memory for the dataset size
+\end{itemize}
+
+\section{Contact Information}
+For further assistance or to report issues, please contact:
+\begin{itemize}
+    \item Project repository: \url{https://github.com/niziyan/x264-performance-prediction}
+\end{itemize}
+
+\end{document}

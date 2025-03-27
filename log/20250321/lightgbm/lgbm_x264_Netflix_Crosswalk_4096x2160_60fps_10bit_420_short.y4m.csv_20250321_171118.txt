@@ -1,0 +1,5 @@
+dataset: Netflix_Crosswalk_4096x2160_60fps_10bit_420_short.y4m.csv
+runs: 30
+MAE: 3.51±0.24
+RMSE: 7.06±0.39
+MAPE: 15.37±0.78

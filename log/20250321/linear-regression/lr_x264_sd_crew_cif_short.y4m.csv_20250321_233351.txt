@@ -1,0 +1,5 @@
+dataset: sd_crew_cif_short.y4m.csv
+runs: 30
+MAE: 0.24±0.01
+RMSE: 0.32±0.01
+MAPE: 61.67±3.59

@@ -1,0 +1,5 @@
+dataset: sintel_trailer_2k_720p24_short.y4m.csv
+runs: 30
+MAE: 0.37±0.01
+RMSE: 0.46±0.01
+MAPE: 50.92±2.70

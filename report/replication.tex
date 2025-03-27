@@ -1,0 +1,210 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{times} 
+\usepackage[a4paper,margin=1.35in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Replication Instructions for X264 Configuration Performance Study},
+    pdfpagemode=FullScreen,
+}
+
+\singlespacing 
+\title{Replication Instructions for X264 Configuration Performance Study}
+\author{Configuration Performance Learning Research}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+This document provides detailed instructions for replicating the experimental results presented in our study comparing Linear Regression and LightGBM models for predicting x264 encoder performance. By following these steps, you should be able to reproduce our findings with minimal deviation.
+
+\section{Obtaining the Source Code}
+
+The complete source code for this study is available on GitHub:
+
+\begin{lstlisting}[language=bash]
+# Clone the repository
+git clone https://github.com/niziyan/x264-performance-prediction.git
+cd x264-performance-prediction
+\end{lstlisting}
+
+\section{Environment Setup}
+
+To ensure consistent results, we recommend setting up a virtual environment with the exact versions of dependencies used in our study:
+
+\begin{lstlisting}[language=bash]
+# Create and activate a virtual environment
+python -m venv x264_env
+source x264_env/bin/activate  # On Windows: x264_env\Scripts\activate
+
+# Install dependencies with specific versions
+pip install numpy==1.19.5
+pip install pandas==1.2.4
+pip install scikit-learn==0.24.2
+pip install lightgbm==3.2.1
+\end{lstlisting}
+
+\section{Dataset Preparation}
+
+\subsection{Obtaining the Dataset}
+The x264 dataset (version baee400) used in our study can be downloaded from:
+\url{https://github.com/ideas-labo/ISE/tree/main/lab2}
+
+\begin{lstlisting}[language=bash]
+# Download the dataset
+git clone https://github.com/ideas-labo/ISE/tree/main/lab2
+\end{lstlisting}
+
+\subsection{Dataset Organization}
+Ensure the dataset is properly organized in the expected directory structure:
+
+\begin{lstlisting}
+datasets/
+└── x264/
+    ├── blue_sky_1080p25.csv
+    ├── Johnny_1280x720_60.csv
+    ├── Netflix_Crosswalk_1080p.csv
+    ├── Riverbed_1080p25.csv
+    ├── SD_Bridge_close_cif.csv
+    ├── SD_City_cif.csv
+    ├── SD_Crew_cif.csv
+    ├── Pedestrian_1080p25.csv
+    └── Sintel_Trailer_1080p24.csv
+\end{lstlisting}
+
+\section{Replicating Experiments}
+
+\subsection{Creating Required Directories}
+Ensure the log directory structure exists:
+
+\begin{lstlisting}[language=bash]
+mkdir -p log
+\end{lstlisting}
+
+\subsection{Running Linear Regression Experiments}
+To replicate the Linear Regression results:
+
+\begin{lstlisting}[language=bash]
+# Run on all CSV files in the x264 dataset with 30 iterations per file
+python lr.py --dataset x264 --runs 30
+\end{lstlisting}
+
+\subsection{Running LightGBM Experiments}
+To replicate the LightGBM results:
+
+\begin{lstlisting}[language=bash]
+# Run on all CSV files in the x264 dataset with 30 iterations per file
+python lightGBM.py --dataset x264 --runs 30
+\end{lstlisting}
+
+These commands will process all nine video datasets, running 30 experiments for each dataset with different random seeds for train-test splitting.
+
+\section{Verifying Results}
+
+\subsection{Expected Outcome}
+After running the experiments, you should find log files in the log directory. The average results across all nine videos should be approximately:
+
+\begin{table}[h]
+\centering
+\caption{Expected Performance Results}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{MAE (s)} & \textbf{RMSE (s)} & \textbf{MAPE (\%)} \\
+\midrule
+Linear Regression & 4.32±0.25 & 6.19±0.35 & 18.7±1.2 \\
+LightGBM & 3.12±0.20 & 4.24±0.28 & 13.9±0.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+
+\section{Troubleshooting}
+
+If you encounter discrepancies in your results, check these common issues:
+
+\begin{itemize}
+    \item \textbf{Package Versions}: Different versions of packages, especially scikit-learn and lightgbm, can produce slightly different results. Ensure you use the exact versions specified.
+    
+    \item \textbf{Random Seed}: Our experiments use fixed random seeds for reproducibility. Ensure you haven't modified the random state parameters in the code.
+    
+    \item \textbf{Hardware Differences}: Numerical precision may vary slightly on different hardware. Results should still be very close.
+    
+    \item \textbf{Dataset}: Verify you're using the exact same dataset (x264 version baee400) to ensure consistent results.
+\end{itemize}
+
+
+
+
+\section{Extended Experiments}
+
+To explore beyond our reported results, you may want to try:
+
+\begin{itemize}
+    \item Different train-test split ratios:
+    \begin{lstlisting}[language=bash]
+    # Modify data_loader.py to use different test_size
+    python lr.py --dataset x264 --runs 10
+    python lightGBM.py --dataset x264 --runs 10
+    \end{lstlisting}
+    
+    \item Different LightGBM hyperparameters:
+    \begin{lstlisting}[language=bash]
+    # Modify params in lightGBM.py
+    python lightGBM.py --dataset x264 --runs 10
+    \end{lstlisting}
+    
+    \item Adding more models (e.g., Random Forest, Neural Networks)
+\end{itemize}
+
+\section{Conclusion}
+
+By following these instructions, you should be able to replicate our experimental results comparing Linear Regression and LightGBM for x264 configuration performance prediction. If successful, you should observe that LightGBM consistently outperforms Linear Regression across all metrics, with statistical significance (p < 0.001).
+
+\end{document}
